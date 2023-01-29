@@ -10,6 +10,7 @@
     <li>I basically built the app if any object near to 5 meter, it will provide the audio signal to user with the object name and distance of the object!</li>
     <li>Basically I got the repo from here <a href="https://github.com/HassanBinHaroon/object_detection-PLUS-distance_estimation-v1">GitHub</a>. I just implemented with some modification! </li>
     <li>I have tried some other apporaches but I not able to figure it out!</li>
+    <li> If I had a team, it would be better.!</li>
     
 ## Link to access the project: 
 * If the link is not working sorry for that, Digital ocean has some problem today or some main mistake from my side. 
