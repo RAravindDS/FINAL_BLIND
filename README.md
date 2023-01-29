@@ -11,4 +11,7 @@
     <li>Basically I got the repo from here <a href="https://github.com/HassanBinHaroon/object_detection-PLUS-distance_estimation-v1">GitHub</a>. I just implemented with some modification! </li>
     <li>I have tried some other apporaches but I not able to figure it out!</li>
     
-    
+
+
+## Workflow Diagram: 
+<center><img src="images/workflow_diagram.png" width="700"/></center> 

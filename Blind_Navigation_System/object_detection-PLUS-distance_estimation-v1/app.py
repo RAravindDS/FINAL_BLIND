@@ -7,8 +7,6 @@ import base64
 import streamlit as st 
 
 
-
-
 print('fine')
 st.header("Prediction Tab")
 st.markdown("""
@@ -19,7 +17,7 @@ st.markdown("""
     <li> This is basically a <b>object detection model</b>( <b>yolo v8</b>) with the <b>distance estimation</b>.</li>
     <li>I basically built the app if any object near to 5 meter, it will provide the audio signal to user with the object name and distance of the object!</li>
     <li>Basically I got the repo from here <a href="https://github.com/HassanBinHaroon/object_detection-PLUS-distance_estimation-v1">GitHub</a>. I just implemented with some modification! </li>
-    <li>I have tried some other apporaches but I not able to figure it out!</li></body>""")
+    <li>I have tried some other apporaches but I not able to figure it out!</li></body>""", unsafe_allow_html=True)
 
 file = st.file_uploader("Choose a video...", type=["mp4"])
 if st.button('submit'):
