@@ -24,9 +24,10 @@ jobs:
     - name: Building Docker image and checking the image 
       run: docker build -f Blind_Navigation_System/Dockerfile -t streamlit .
       shell: bash
+    - name: docker image names 
+      run: docker images 
     - name: Tagging the docker images for push to registry
-      run: |
-        docker tag FINAL_BLIND_streamlit ${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:$(echo $GITHUB_SHA | head -c7)
+      run: docker tag FINAL_BLIND_streamlit ${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:$(echo $GITHUB_SHA | head -c7)
       shell: bash
     - name: Checking the docker images after tagging 
       run: docker images
