@@ -9,7 +9,7 @@ import streamlit as st
 
 
 
-
+print('fine')
 st.header("Prediction Tab")
 st.markdown("""
     <center><h1>Welcome to Blind Navigation System Project!</h1></center><body>
