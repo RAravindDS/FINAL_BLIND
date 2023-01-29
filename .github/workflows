@@ -42,7 +42,7 @@ jobs:
     - name: Push image to DigitalOcean Container Registry
       run: docker push ${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:$(echo $GITHUB_SHA | head -c7)
     - name: Update deployment file
-      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:'${TAG}'|' $GITHUB_WORKSPACE/config/celery_test.yaml
+      run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:'${TAG}'|' $GITHUB_WORKSPACE/config/streamlit_test.yaml
 
     - name: Save DigitalOcean kubeconfig with short-lived credentials
       run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
@@ -53,6 +53,6 @@ jobs:
     - name: Reference the secret you just uploaded as an imagePullSecrets
       run: "kubectl patch serviceaccount default -p '{\"imagePullSecrets\": [{\"name\": \"registry-celery-worker\"}]}'"
     - name: Deploy to DigitalOcean Kubernetes
-      run: kubectl apply -f $GITHUB_WORKSPACE/config/redis_test.yaml
+      run: kubectl apply -f $GITHUB_WORKSPACE/config/streamlit_test.yaml
 
-    
+   
