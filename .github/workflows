@@ -5,7 +5,7 @@ on:
     branches: 
       - main 
     paths: 
-      - './Blind_Navigation_System/object_detection-PLUS-distance_estimation-v1/app.py'
+      - './object_detection-PLUS-distance_estimation-v1/app.py'
       - 'tasks.py'
       - 'Dockerfile'
       - '.github/workflows/**'
