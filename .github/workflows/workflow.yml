@@ -24,9 +24,10 @@ jobs:
     - name: Building Docker image and checking the image 
       run: docker build -f Blind_Navigation_System/Dockerfile -t streamlit .
       shell: bash
+    - name: docker image names 
+      run: docker images 
     - name: Tagging the docker images for push to registry
-      run: |
-        docker tag FINAL_BLIND_streamlit ${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:$(echo $GITHUB_SHA | head -c7)
+      run: docker tag streamlit ${{ secrets.REGISTRY_NAME }}/streamlit:$(echo $GITHUB_SHA | head -c7)
       shell: bash
     - name: Checking the docker images after tagging 
       run: docker images
@@ -35,7 +36,7 @@ jobs:
       run: doctl registry login --expiry-seconds 1200
       shell: bash
     - name: Push image to DigitalOcean Container Registry
-      run: docker push ${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:$(echo $GITHUB_SHA | head -c7)
+      run: docker push ${{ secrets.REGISTRY_NAME }}/streamlit:$(echo $GITHUB_SHA | head -c7)
     - name: Update deployment file
       run: TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/FINAL_BLIND_streamlit:'${TAG}'|' $GITHUB_WORKSPACE/config/streamlit_test.yaml
 
