@@ -22,7 +22,7 @@ jobs:
       with:
         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
     - name: Changing the directory 
-      run: cd Blind_Navigation_System/
+      run: cd Blind_Navigation_System
     - name: Building Docker image and chekcing the image 
       run:  docker build -t streamlit .
       shell: bash
