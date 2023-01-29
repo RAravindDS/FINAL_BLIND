@@ -11,4 +11,5 @@ COPY . /app
 WORKDIR /app
 RUN pip3 install -r requirements.txt
 RUN python first.py 
+RUN cd Blind/navigaion_System/object_detection-PLUS-distance_estimation-v1/
 ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
