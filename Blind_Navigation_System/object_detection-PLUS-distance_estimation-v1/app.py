@@ -6,8 +6,6 @@ import os
 import base64
 import streamlit as st 
 
-titles = ['Home', 'Blind prediction', 'Workflow'] 
-home, blind, workflow = st.tabs(titles) 
 
 
 
