@@ -20,7 +20,7 @@
 <center><img src="images/workflow_diagram.png" width="700"/></center> 
 
 ## User Interface: 
-<center><img src="images/user_interface.png" width="700"/></center> 
+<center><img src="images/Intro page.png" width="700"/></center> 
 
 ## Kube Interface: 
 <center><img src="images/kube_interface.png" width="700"/></center> 
