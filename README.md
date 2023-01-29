@@ -11,7 +11,16 @@
     <li>Basically I got the repo from here <a href="https://github.com/HassanBinHaroon/object_detection-PLUS-distance_estimation-v1">GitHub</a>. I just implemented with some modification! </li>
     <li>I have tried some other apporaches but I not able to figure it out!</li>
     
-
+## Link to access the project: 
+* If the link is not working sorry for that, Digital ocean has some problem today or some main mistake from my side. 
+* Link: http://146.190.8.232:8501/
+* You can access directly, it's a streamlit! 
 
 ## Workflow Diagram: 
 <center><img src="images/workflow_diagram.png" width="700"/></center> 
+
+## User Interface: 
+<center><img src="images/user_interface.png" width="700"/></center> 
+
+## Kube Interface: 
+<center><img src="images/kube_interface.png" width="700"/></center> 
