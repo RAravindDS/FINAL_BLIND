@@ -1,0 +1,81 @@
+name: Testing my CI/CD with digital ocean for k8s deployment 
+
+on: 
+  push: 
+    branches: 
+      - main 
+    paths: 
+      - 'config/**'
+      - 'server.py'
+      - 'app.py'
+      - 'tasks.py'
+      - 'Dockerfile'
+      - '.github/workflows/**'
+      - 'requirements.txt'
+      - 'flask_utils/app.py'
+      - 'flask_utils/Dockerfile'
+      - 'questgen/app.py'
+  pull_request: 
+    branches: 
+      - main 
+  workflow_dispatch:
+
+jobs: 
+  building_docker_compose: 
+    runs-on: ubuntu-latest 
+    steps: 
+    - name: Checkout master
+      uses: actions/checkout@main 
+    - name: Install doctl
+      uses: digitalocean/action-doctl@v2
+      with:
+        token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    - name: Building Docker image and chekcing the image 
+      run:  | 
+        docker-compose up -d --build
+        docker images 
+      shell: bash
+    - name: Tagging the docker images for push to registry
+      run: |
+        docker tag actions-kube-flask-integerated_flask_application ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_flask_application:$(echo $GITHUB_SHA | head -c7)
+        docker tag actions-kube-flask-integerated_flower ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_flower:$(echo $GITHUB_SHA | head -c7)
+        docker tag actions-kube-flask-integerated_celery_worker ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_celery_worker:$(echo $GITHUB_SHA | head -c7)
+        docker tag actions-kube-flask-integerated_flask_utils ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_flask_utils:$(echo $GITHUB_SHA | head -c7)
+        docker tag actions-kube-flask-integerated_quest_gen ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_quest_gen:$(echo $GITHUB_SHA | head -c7)
+      shell: bash
+    - name: Checking the docker images after tagging 
+      run: docker images
+      shell: bash
+    - name: Log in to DigitalOcean Container Registry with short-lived credentials
+      run: doctl registry login --expiry-seconds 1200
+      shell: bash
+    - name: Push image to DigitalOcean Container Registry
+      run: |
+        docker push ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_flask_application:$(echo $GITHUB_SHA | head -c7)
+        docker push ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_celery_worker:$(echo $GITHUB_SHA | head -c7)
+        docker push ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_flask_utils:$(echo $GITHUB_SHA | head -c7)
+        docker push ${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_quest_gen:$(echo $GITHUB_SHA | head -c7)
+    - name: Update deployment file
+      run: |
+        TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_celery_worker:'${TAG}'|' $GITHUB_WORKSPACE/config/celery_test.yaml
+        TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_flask_application:'${TAG}'|' $GITHUB_WORKSPACE/config/flask_test.yaml
+        TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_flask_utils:'${TAG}'|' $GITHUB_WORKSPACE/config/flask_utils_test.yaml
+        TAG=$(echo $GITHUB_SHA | head -c7) && sed -i 's|<IMAGE>|${{ secrets.REGISTRY_NAME }}/actions-kube-flask-integerated_quest_gen:'${TAG}'|' $GITHUB_WORKSPACE/config/quest_gen.yaml
+    - name: Save DigitalOcean kubeconfig with short-lived credentials
+      run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.CLUSTER_NAME }}
+    - name: Upload credentials of your registry to your DigitalOcean Kubernetes cluster
+      run: doctl registry kubernetes-manifest | kubectl apply -f -
+    - name: Checking the docker image
+      run: docker images 
+    - name: Checking the mainfest files!
+      run: cat $GITHUB_WORKSPACE/config/celery_test.yaml
+    - name: Reference the secret you just uploaded as an imagePullSecrets
+      run: "kubectl patch serviceaccount default -p '{\"imagePullSecrets\": [{\"name\": \"registry-celery-worker\"}]}'"
+    - name: Deploy to DigitalOcean Kubernetes
+      run: |
+        kubectl apply -f $GITHUB_WORKSPACE/config/redis_test.yaml
+        kubectl apply -f $GITHUB_WORKSPACE/config/flask_test.yaml
+        kubectl apply -f $GITHUB_WORKSPACE/config/celery_test.yaml
+        kubectl apply -f $GITHUB_WORKSPACE/config/flask_utils_test.yaml
+        kubectl apply -f $GITHUB_WORKSPACE/config/quest_gen.yaml 
+    
