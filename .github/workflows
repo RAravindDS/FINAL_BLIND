@@ -5,11 +5,11 @@ on:
     branches: 
       - main 
     paths: 
-      - 'app.py'
+      - '/workspaces/FINAL_BLIND/Blind_Navigation_System/object_detection-PLUS-distance_estimation-v1/app.py'
       - 'tasks.py'
       - 'Dockerfile'
       - '.github/workflows/**'
-      - 'requirements.txt'
+      - '/workspaces/FINAL_BLIND/Blind_Navigation_System/requirements.txt'
 
   pull_request: 
     branches: 
