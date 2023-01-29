@@ -21,10 +21,8 @@ jobs:
       uses: digitalocean/action-doctl@v2
       with:
         token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-    - name: Changing the directory 
-      run: cd Blind_Navigation_System
-    - name: Building Docker image and chekcing the image 
-      run:  docker build -t streamlit .
+    - name: Building Docker image and checking the image 
+      run: docker build -f Blind_Navigation_System/Dockerfile -t streamlit .
       shell: bash
     - name: Tagging the docker images for push to registry
       run: |
